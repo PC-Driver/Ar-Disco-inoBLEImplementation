@@ -6,3 +6,4 @@ To use:
 
 
 1) install libraries into arduino IDE 
+2) install stm32 core library into IDE - link for instructions for Arduino library installation found here: https://github.com/stm32duino/Arduino_Core_STM32
