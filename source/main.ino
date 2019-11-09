@@ -196,4 +196,3 @@ void switchCharacteristicWritten(BLEDevice central, BLECharacteristic characteri
   }
 
   */
-}
