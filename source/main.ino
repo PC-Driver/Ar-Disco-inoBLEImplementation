@@ -161,11 +161,6 @@ void loop(){
         heartRate.writeValue(body.oxygen);
         heartRate.writeValue(body.status);
       }
- 
-    // when the central disconnects, turn off the LED:
-    Serial.print("Disconnected from central: ");
-    Serial.println(central.address());
-
     
   
 }
