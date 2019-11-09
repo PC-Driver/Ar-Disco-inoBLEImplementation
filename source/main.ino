@@ -132,7 +132,7 @@ void loop(){
     body = bioHub.readBpm();
     
     
-    Old heart rate code which allows output, commented out to prevent bugs.
+//    Old heart rate code which allows output, commented out to prevent bugs.
     Serial.print("Heartrate: ");
     Serial.println(body.heartRate); 
     Serial.print("Confidence: ");
