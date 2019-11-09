@@ -27,11 +27,11 @@
 #include <SparkFun_Bio_Sensor_Hub_Library.h>
 #include <Wire.h>
 #include <ArduinoBLE.h>
-long previousMillis = 0; 
 
 // Reset pin, MFIO pin
 int resPin = 4;
 int mfioPin = 5;
+long previousMillis = 0; 
 
 // Takes address, reset pin, and MFIO pin.
 SparkFun_Bio_Sensor_Hub bioHub(resPin, mfioPin); 
@@ -132,7 +132,7 @@ void loop(){
     body = bioHub.readBpm();
     
     
-    /* Old heart rate code which allows output, commented out to prevent bugs.
+    Old heart rate code which allows output, commented out to prevent bugs.
     Serial.print("Heartrate: ");
     Serial.println(body.heartRate); 
     Serial.print("Confidence: ");
@@ -161,7 +161,7 @@ void loop(){
         heartRate.writeValue(body.oxygen);
         heartRate.writeValue(body.status);
       }
-    
+
   
 }
 
