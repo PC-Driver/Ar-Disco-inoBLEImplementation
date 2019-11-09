@@ -52,13 +52,6 @@ bioData body;
 
 BLEService heartService("19B10000-E8F2-537E-4F6C-D104768A1214"); // create service - also update the UUID
 
-// create switch characteristic and allow remote device to read and write
-//i don't think we need this
-//BLEByteCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
-
-//gotta update above switch cahracteristic and heartservice UUID -check bluetooth.org website for proper heartrate stuff
-
-
 void setup(){
 
   Serial.begin(115200);
@@ -83,6 +76,7 @@ void setup(){
 
   // add service
   BLE.addService(heartService); //you may need to change this?
+  
 
   // assign event handlers for connected, disconnected to peripheral
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
@@ -125,9 +119,10 @@ void loop(){
     // Information from the readBpm function will be saved to our "body"
     // variable.  
     body = bioHub.readBpm();
+    
+    /* Old heart rate code which allows output, commented out to prevent bugs.
     Serial.print("Heartrate: ");
     Serial.println(body.heartRate); 
-
     Serial.print("Confidence: ");
     Serial.println(body.confidence); 
     Serial.print("Oxygen: ");
@@ -137,7 +132,11 @@ void loop(){
     // Slow it down or your heart rate will go up trying to keep up
     // with the flow of numbers
     delay(250); 
-    ble.poll();
+  */
+    BLE.poll();
+
+    
+  
 }
 
 
