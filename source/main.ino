@@ -84,9 +84,9 @@ void setup(){
   // add service
   BLE.addService(heartService);
   heartRate.writeValue(body.heartRate);
-  heartRate.writeValue(body.confidence);
-  heartRate.writeValue(body.oxygen);
-  heartRate.writeValue(body.status);
+  confidence.writeValue(body.confidence);
+  oxygen.writeValue(body.oxygen);
+  fingerStatus.writeValue(body.status);
   
 
   // assign event handlers for connected, disconnected to peripheral
@@ -142,11 +142,10 @@ void loop(){
     Serial.print("Status: ");
     Serial.println(body.status); 
 
-
-        heartRate.writeValue(body.heartRate);
-        heartRate.writeValue(body.confidence);
-        heartRate.writeValue(body.oxygen);
-        heartRate.writeValue(body.status);
+  heartRate.writeValue(body.heartRate);
+  confidence.writeValue(body.confidence);
+  oxygen.writeValue(body.oxygen);
+  fingerStatus.writeValue(body.status);
    
     // Slow it down or your heart rate will go up trying to keep up
     // with the flow of numbers
