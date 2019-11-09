@@ -27,6 +27,7 @@
 #include <SparkFun_Bio_Sensor_Hub_Library.h>
 #include <Wire.h>
 #include <ArduinoBLE.h>
+long previousMillis = 0; 
 
 // Reset pin, MFIO pin
 int resPin = 4;
