@@ -49,8 +49,14 @@ bioData body;
 // body.oxygen     - Blood oxygen level
 // body.status     - Has a finger been sensed?
 
+//ble heart rate service
+BLEService heartService("018D");
 
-BLEService heartService("19B10000-E8F2-537E-4F6C-D104768A1214"); // create service - also update the UUID
+//BLE heart rate characteristic
+BLEUnsignedCharCharacteristic heartRate("018D1", BLERead | BLENotify);
+BLEUnsignedCharCharacteristic confidence("018D2", BLERead | BLENotify);
+BLEUnsignedCharCharacteristic oxygen("018D3", BLERead | BLENotify);
+BLEUnsignedCharCharacteristic fingerStatus("018D4", BLERead | BLENotify);
 
 void setup(){
 
@@ -64,18 +70,22 @@ void setup(){
   }
 
   // set the local name peripheral advertises
-  BLE.setLocalName("sending heart rate, confidence, oxygen and status...");
+  BLE.setLocalName("HeartRateMonitor");
   // set the UUID for the service this peripheral advertises
-  BLE.setAdvertisedService(heartService);
+  BLE.setAdvertisedService(heartService); 
 
   // add the characteristic to the service
-  heartService.addCharacteristic(body.heartRate);
-  heartService.addCharacteristic(body.confidence);
-  heartService.addCharacteristic(body.oxygen);
-  heartService.addCharacteristic(body.status);
+  heartService.addCharacteristic(heartRate);
+  heartService.addCharacteristic(confidence);
+  heartService.addCharacteristic(oxygen);
+  heartService.addCharacteristic(fingerStatus);
 
   // add service
-  BLE.addService(heartService); //you may need to change this?
+  BLE.addService(heartService);
+  heartRate.writeValue(body.heartRate);
+  heartRate.writeValue(body.confidence);
+  heartRate.writeValue(body.oxygen);
+  heartRate.writeValue(body.status);
   
 
   // assign event handlers for connected, disconnected to peripheral
@@ -120,6 +130,7 @@ void loop(){
     // variable.  
     body = bioHub.readBpm();
     
+    
     /* Old heart rate code which allows output, commented out to prevent bugs.
     Serial.print("Heartrate: ");
     Serial.println(body.heartRate); 
@@ -134,6 +145,25 @@ void loop(){
     delay(250); 
   */
     BLE.poll();
+
+
+    // check the heart level level every 200ms
+    // while the central is connected:
+ 
+      long currentMillis = millis();
+      // if 200ms have passed, check the battery level:
+      if (currentMillis - previousMillis >= 200) {
+        previousMillis = currentMillis;
+
+        heartRate.writeValue(body.heartRate);
+        heartRate.writeValue(body.confidence);
+        heartRate.writeValue(body.oxygen);
+        heartRate.writeValue(body.status);
+      }
+ 
+    // when the central disconnects, turn off the LED:
+    Serial.print("Disconnected from central: ");
+    Serial.println(central.address());
 
     
   
