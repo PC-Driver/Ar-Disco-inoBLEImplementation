@@ -50,17 +50,20 @@ bioData body;
 // body.status     - Has a finger been sensed?
 
 
-BLEService heartService("19B10000-E8F2-537E-4F6C-D104768A1214"); // create service
+BLEService heartService("19B10000-E8F2-537E-4F6C-D104768A1214"); // create service - also update the UUID
 
 // create switch characteristic and allow remote device to read and write
-BLEByteCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
+//i don't think we need this
+//BLEByteCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
+
+//gotta update above switch cahracteristic and heartservice UUID -check bluetooth.org website for proper heartrate stuff
 
 
 void setup(){
 
   Serial.begin(115200);
 
-    // begin BLE initialization
+    // begin BLE initialization`
   if (!BLE.begin()) {
     Serial.println("starting BLE failed!");
 
@@ -68,24 +71,22 @@ void setup(){
   }
 
   // set the local name peripheral advertises
-  BLE.setLocalName("HeartRateCallback");
+  BLE.setLocalName("sending heart rate, confidence, oxygen and status...");
   // set the UUID for the service this peripheral advertises
   BLE.setAdvertisedService(heartService);
 
   // add the characteristic to the service
-  heartService.addCharacteristic(switchCharacteristic);
+  heartService.addCharacteristic(body.heartRate);
+  heartService.addCharacteristic(body.confidence);
+  heartService.addCharacteristic(body.oxygen);
+  heartService.addCharacteristic(body.status);
 
   // add service
-  BLE.addService(heartService);
+  BLE.addService(heartService); //you may need to change this?
 
   // assign event handlers for connected, disconnected to peripheral
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
-
-  // assign event handlers for characteristic
-  switchCharacteristic.setEventHandler(BLEWritten, switchCharacteristicWritten);
-  // set an initial value for the characteristic
-  switchCharacteristic.setValue(0);
 
   // start advertising
   BLE.advertise();
@@ -126,6 +127,7 @@ void loop(){
     body = bioHub.readBpm();
     Serial.print("Heartrate: ");
     Serial.println(body.heartRate); 
+
     Serial.print("Confidence: ");
     Serial.println(body.confidence); 
     Serial.print("Oxygen: ");
@@ -135,12 +137,11 @@ void loop(){
     // Slow it down or your heart rate will go up trying to keep up
     // with the flow of numbers
     delay(250); 
+    ble.poll();
 }
 
 
 ///////ble functions
-
-
 
 void blePeripheralConnectHandler(BLEDevice central) {
   // central connected event handler
@@ -154,6 +155,7 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
   Serial.println(central.address());
 }
 
+/*don't need to write so we can delete
 
 ///change this to heart stuff!
 void switchCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic) {
@@ -167,4 +169,6 @@ void switchCharacteristicWritten(BLEDevice central, BLECharacteristic characteri
     Serial.println("LED off");
     digitalWrite(ledPin, LOW);
   }
+
+  */
 }
