@@ -144,7 +144,7 @@ void loop(){
     // Slow it down or your heart rate will go up trying to keep up
     // with the flow of numbers
     delay(250); 
-  */
+  
     BLE.poll();
 
 
