@@ -141,6 +141,13 @@ void loop(){
     Serial.println(body.oxygen); 
     Serial.print("Status: ");
     Serial.println(body.status); 
+
+
+        heartRate.writeValue(body.heartRate);
+        heartRate.writeValue(body.confidence);
+        heartRate.writeValue(body.oxygen);
+        heartRate.writeValue(body.status);
+   
     // Slow it down or your heart rate will go up trying to keep up
     // with the flow of numbers
     delay(250); 
@@ -148,19 +155,8 @@ void loop(){
     BLE.poll();
 
 
-    // check the heart level level every 200ms
-    // while the central is connected:
- 
-      long currentMillis = millis();
-      // if 200ms have passed, check the battery level:
-      if (currentMillis - previousMillis >= 200) {
-        previousMillis = currentMillis;
 
-        heartRate.writeValue(body.heartRate);
-        heartRate.writeValue(body.confidence);
-        heartRate.writeValue(body.oxygen);
-        heartRate.writeValue(body.status);
-      }
+
 
   
 }
